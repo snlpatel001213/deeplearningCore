@@ -1,5 +1,7 @@
 package DeepLearning;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.Random;
 import static DeepLearning.utils.*;
 
@@ -108,7 +110,7 @@ public class DBN {
 			}
 			// lr *= 0.95;
 		}
-		
+
 		// printing weights
 		for(int hidden_layer_number=0;hidden_layer_number<sigmoid_layers.length;hidden_layer_number++)
 		{
@@ -118,22 +120,26 @@ public class DBN {
 				for(int cols=0; cols<sigmoid_layers[hidden_layer_number].W[0].length;cols++)
 				{
 					System.out.print(sigmoid_layers[hidden_layer_number].W[rows][cols] + "\t");
+					// passing data to convert to XML
+					DeepLearning.twoDtoXML.XMLify("model.txt",hidden_layer_number,rows,cols,sigmoid_layers[hidden_layer_number].W[rows][cols]);
 				}
 				System.out.println();
 			}
-			System.out.println("==========================================================");
+			System.out.println();
 		}
+		System.out.println("==========================================================");
 	}
+
 
 	public void predict(int[] x, double[] y) {
 		double[] layer_input = new double[0];
 		// int prev_layer_input_size;
 		double[] prev_layer_input = new double[n_ins]; //n_ins = 6 number of input 
 		for(int j=0; j<n_ins; j++) 
-			{
+		{
 			//System.out.println(x[j]); //{1, 1, 0, 0, 0, 0} test row
 			prev_layer_input[j] = x[j];
-			}
+		}
 
 		double linear_output;
 
@@ -160,7 +166,7 @@ public class DBN {
 				for(int j=0; j<sigmoid_layers[i].n_out; j++) prev_layer_input[j] = layer_input[j];
 			}
 		}
-		
+
 
 
 		for(int i=0; i<log_layer.n_out; i++) {
@@ -170,7 +176,7 @@ public class DBN {
 			}
 			y[i] += log_layer.b[i];
 		}
-		
+
 
 		log_layer.softmax(y);
 	}
@@ -209,7 +215,7 @@ public class DBN {
 				{0, 1, 0},
 				{0, 0, 2},
 		};
-		
+
 
 		// construct DNN.DBN
 		DBN dbn = new DBN(train_N, n_ins, hidden_layer_sizes, n_outs, n_layers, rng);
@@ -235,7 +241,7 @@ public class DBN {
 			//test_X[i] taking test row wise {1, 1, 0, 0, 0, 0}
 			//test_Y Output matrix size
 			dbn.predict(test_X[i], test_Y[i]);
-			
+
 			for(int j=0; j<n_outs; j++) {
 				//System.out.print(test_Y[i][j] + " ");
 			}

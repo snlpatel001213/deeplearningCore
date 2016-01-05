@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<DeepBoltzmannNetwork>
+	<LayerNumber No="0">
+		<nextlayer No="0">
+			<prevlayer No="0">4.514625040025772</prevlayer>
+			<prevlayer No="1">2.764288582257629</prevlayer>
+			<prevlayer No="2">0.7396949057342318</prevlayer>
+			<prevlayer No="3">-4.769806786448704</prevlayer>
+			<prevlayer No="4">-3.6397090864488093</prevlayer>
+			<prevlayer No="5">-1.381738649781506</prevlayer>
+		</nextlayer>
+		<nextlayer No="1">
+			<prevlayer No="0">-1.7017488203791966</prevlayer>
+			<prevlayer No="1">-1.833327836084823</prevlayer>
+			<prevlayer No="2">1.63195666160704</prevlayer>
+			<prevlayer No="3">1.6195309495711971</prevlayer>
+			<prevlayer No="4">0.7469362044860655</prevlayer>
+			<prevlayer No="5">-1.7645365134980675</prevlayer>
+		</nextlayer>
+	</LayerNumber>
+	<LayerNumber No="1">
+		<nextlayer No="0">
+			<prevlayer No="0">-3.4588272776421003</prevlayer>
+			<prevlayer No="1">3.373747964815107</prevlayer>
+		</nextlayer>
+		<nextlayer No="1">
+			<prevlayer No="0">-0.14533016241161648</prevlayer>
+			<prevlayer No="1">0.21812616481423247</prevlayer>
+		</nextlayer>
+		<nextlayer No="2">
+			<prevlayer No="0">1.9353334565910756</prevlayer>
+			<prevlayer No="1">-1.905275216194594</prevlayer>
+		</nextlayer>
+	</LayerNumber>
+	<LayerNumber No="2">
+		<nextlayer No="0">
+			<prevlayer No="0">-2.059429623279683</prevlayer>
+			<prevlayer No="1">0.07152499921582375</prevlayer>
+			<prevlayer No="2">1.9223358808587236</prevlayer>
+		</nextlayer>
+		<nextlayer No="1">
+			<prevlayer No="0">1.2635067222759921</prevlayer>
+			<prevlayer No="1">0.3660876135197711</prevlayer>
+			<prevlayer No="2">-1.2729950329759656</prevlayer>
+		</nextlayer>
+		<nextlayer No="2">
+			<prevlayer No="0">1.4027607937913105</prevlayer>
+			<prevlayer No="1">0.09940584876952441</prevlayer>
+			<prevlayer No="2">-1.608968503071136</prevlayer>
+		</nextlayer>
+		<nextlayer No="3">
+			<prevlayer No="0">1.1281032486150748</prevlayer>
+			<prevlayer No="1">0.10218367997526005</prevlayer>
+			<prevlayer No="2">-1.135721987677661</prevlayer>
+		</nextlayer>
+	</LayerNumber>
+	<LayerNumber No="3">
+		<nextlayer No="0">
+			<prevlayer No="0">-0.6493453667233212</prevlayer>
+			<prevlayer No="1">0.31534002392107474</prevlayer>
+			<prevlayer No="2">0.5595304717625937</prevlayer>
+			<prevlayer No="3">0.3406691155829846</prevlayer>
+		</nextlayer>
+		<nextlayer No="1">
+			<prevlayer No="0">0.12326642753063284</prevlayer>
+			<prevlayer No="1">-0.33414074172773855</prevlayer>
+			<prevlayer No="2">-0.03492607139836626</prevlayer>
+			<prevlayer No="3">-0.03901495478182703</prevlayer>
+		</nextlayer>
+		<nextlayer No="2">
+			<prevlayer No="0">-1.0230284371462186</prevlayer>
+			<prevlayer No="1">0.5520226969063557</prevlayer>
+			<prevlayer No="2">0.9243076749262664</prevlayer>
+			<prevlayer No="3">0.6540152206770379</prevlayer>
+		</nextlayer>
+		<nextlayer No="3">
+			<prevlayer No="0">-0.8689162917267521</prevlayer>
+			<prevlayer No="1">0.5671503411359516</prevlayer>
+			<prevlayer No="2">0.9643841768474557</prevlayer>
+			<prevlayer No="3">0.563288336873362</prevlayer>
+		</nextlayer>
+		<nextlayer No="4">
+			<prevlayer No="0">1.608708497094359</prevlayer>
+			<prevlayer No="1">-1.1209172755309442</prevlayer>
+			<prevlayer No="2">-1.3221590947145205</prevlayer>
+			<prevlayer No="3">-0.9978102460479333</prevlayer>
+		</nextlayer>
+		<nextlayer No="5">
+			<prevlayer No="0">0.8895652832181226</prevlayer>
+			<prevlayer No="1">-0.7851848176672261</prevlayer>
+			<prevlayer No="2">-0.9106468488237739</prevlayer>
+			<prevlayer No="3">-0.8908492073689908</prevlayer>
+		</nextlayer>
+	</LayerNumber>
+</DeepBoltzmannNetwork>

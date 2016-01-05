@@ -1,11 +1,22 @@
 package DeepLearning;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import static DeepLearning.utils.*;
 
@@ -88,10 +99,16 @@ public class DBN {
 		}
 	}
 
-	public void finetune(int[][] train_X, int[][] train_Y, double lr, int epochs) {
+	public void finetune(int[][] train_X, int[][] train_Y, double lr, int epochs) throws ParserConfigurationException, TransformerException {
 		int[] layer_input = new int[0];
 		// int prev_layer_input_size;
 		int[] prev_layer_input = new int[0];
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+		// root elements
+		Document doc = docBuilder.newDocument();
+		Element rootElement = doc.createElement("DeepBoltzmannNetwork");
+		doc.appendChild(rootElement);
 
 		for(int epoch=0; epoch<epochs; epoch++) {
 			for(int n=0; n<N; n++) {
@@ -115,34 +132,44 @@ public class DBN {
 			// lr *= 0.95;
 
 
-			// printing weights
-			for(int hidden_layer_number=0;hidden_layer_number<sigmoid_layers.length;hidden_layer_number++)
-			{
-				//System.out.println("sigmoid_layers[i] = " + sigmoid_layers[hidden_layer_number] );
-				for(int rows=0; rows<sigmoid_layers[hidden_layer_number].W.length; rows++)
-				{
-					for(int cols=0; cols<sigmoid_layers[hidden_layer_number].W[0].length;cols++)
-					{
-						//System.out.print(sigmoid_layers[hidden_layer_number].W[rows][cols] + "\t");
-						// passing data to convert to XML
-						//DeepLearning.twoDtoXML.XMLify("model.txt",hidden_layer_number,rows,cols,sigmoid_layers[hidden_layer_number].W[rows][cols]);
-					}
-					//System.out.println();
-				}
-				//System.out.println();
-			}
-			//System.out.println("==========================================================");
+			//			//prints weights
+			//			for(int hidden_layer_number=0;hidden_layer_number<sigmoid_layers.length;hidden_layer_number++)
+			//			{
+			//				System.out.println("sigmoid_layers[i] = " + sigmoid_layers[hidden_layer_number] );
+			//				for(int rows=0; rows<sigmoid_layers[hidden_layer_number].W.length; rows++)
+			//				{
+			//					for(int cols=0; cols<sigmoid_layers[hidden_layer_number].W[0].length;cols++)
+			//					{
+			//						System.out.print(sigmoid_layers[hidden_layer_number].W[rows][cols] + "\t");
+			//					}
+			//					System.out.println();
+			//				}
+			//				System.out.println();
+			//			}
+			//			System.out.println("==========================================================");
 		}
+
+
 		// passing entire weight data to convert to XML
+		
 		for(int hidden_layer_number=0;hidden_layer_number<sigmoid_layers.length;hidden_layer_number++)
 		{
+			Element layernumber = doc.createElement("LayerNumber");
+			rootElement.appendChild(layernumber);
+			layernumber.setAttribute("No",Integer.toString(hidden_layer_number));
 			try {
-				DeepLearning.twoDtoXML.XMLify("model.txt",hidden_layer_number,sigmoid_layers[hidden_layer_number].W);
+				DeepLearning.twoDtoXML.XMLify("model.txt",hidden_layer_number,sigmoid_layers[hidden_layer_number].W,doc,layernumber);
 			} catch (ParserConfigurationException | TransformerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(doc);
+		StreamResult result = new StreamResult(new File("file.xml"));
+		transformer.transform(source, result);
+		System.out.println("File saved!");
 	}
 
 
@@ -209,7 +236,7 @@ public class DBN {
 		int test_N = 4;
 		int n_ins = 6;
 		int n_outs = 3;
-		int[] hidden_layer_sizes = {2,3,4};
+		int[] hidden_layer_sizes = {2,3,4,6};
 		int n_layers = hidden_layer_sizes.length;
 
 		// training data
@@ -238,7 +265,18 @@ public class DBN {
 		dbn.pretrain(train_X, pretrain_lr, k, pretraining_epochs);
 
 		// finetune
-		dbn.finetune(train_X, train_Y, finetune_lr, finetune_epochs);
+		try {
+			dbn.finetune(train_X, train_Y, finetune_lr, finetune_epochs);
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 
 		// test data

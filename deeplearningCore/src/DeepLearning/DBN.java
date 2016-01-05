@@ -3,6 +3,10 @@ package DeepLearning;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
 import static DeepLearning.utils.*;
 
 public class DBN {
@@ -109,25 +113,36 @@ public class DBN {
 				log_layer.train(layer_input, train_Y[n], lr);
 			}
 			// lr *= 0.95;
-		}
 
-		// printing weights
+
+			// printing weights
+			for(int hidden_layer_number=0;hidden_layer_number<sigmoid_layers.length;hidden_layer_number++)
+			{
+				//System.out.println("sigmoid_layers[i] = " + sigmoid_layers[hidden_layer_number] );
+				for(int rows=0; rows<sigmoid_layers[hidden_layer_number].W.length; rows++)
+				{
+					for(int cols=0; cols<sigmoid_layers[hidden_layer_number].W[0].length;cols++)
+					{
+						//System.out.print(sigmoid_layers[hidden_layer_number].W[rows][cols] + "\t");
+						// passing data to convert to XML
+						//DeepLearning.twoDtoXML.XMLify("model.txt",hidden_layer_number,rows,cols,sigmoid_layers[hidden_layer_number].W[rows][cols]);
+					}
+					//System.out.println();
+				}
+				//System.out.println();
+			}
+			//System.out.println("==========================================================");
+		}
+		// passing entire weight data to convert to XML
 		for(int hidden_layer_number=0;hidden_layer_number<sigmoid_layers.length;hidden_layer_number++)
 		{
-			//System.out.println("sigmoid_layers[i] = " + sigmoid_layers[hidden_layer_number] );
-			for(int rows=0; rows<sigmoid_layers[hidden_layer_number].W.length; rows++)
-			{
-				for(int cols=0; cols<sigmoid_layers[hidden_layer_number].W[0].length;cols++)
-				{
-					System.out.print(sigmoid_layers[hidden_layer_number].W[rows][cols] + "\t");
-					// passing data to convert to XML
-					DeepLearning.twoDtoXML.XMLify("model.txt",hidden_layer_number,rows,cols,sigmoid_layers[hidden_layer_number].W[rows][cols]);
-				}
-				System.out.println();
+			try {
+				DeepLearning.twoDtoXML.XMLify("model.txt",hidden_layer_number,sigmoid_layers[hidden_layer_number].W);
+			} catch (ParserConfigurationException | TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			System.out.println();
 		}
-		System.out.println("==========================================================");
 	}
 
 

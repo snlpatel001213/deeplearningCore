@@ -149,27 +149,43 @@ public class DBN {
 			//			System.out.println("==========================================================");
 		}
 
-
-		// passing entire weight data to convert to XML
+		Element weight = doc.createElement("weight");
+		rootElement.appendChild(weight);
 		
+		// passing entire weight data to convert to XML
 		for(int hidden_layer_number=0;hidden_layer_number<sigmoid_layers.length;hidden_layer_number++)
 		{
-			Element layernumber = doc.createElement("LayerNumber");
-			rootElement.appendChild(layernumber);
+			Element layernumber = doc.createElement("layernumber");
+			weight.appendChild(layernumber);
 			layernumber.setAttribute("No",Integer.toString(hidden_layer_number));
 			try {
-				DeepLearning.twoDtoXML.XMLify("model.txt",hidden_layer_number,sigmoid_layers[hidden_layer_number].W,doc,layernumber);
+				DeepLearning.twoDtoXML.XMLify("model.xml",hidden_layer_number,sigmoid_layers[hidden_layer_number].W,doc,layernumber);
 			} catch (ParserConfigurationException | TransformerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+
+		//exporting bias
+		Element bias = doc.createElement("bias");
+		for(int hidden_layer_number=0;hidden_layer_number<sigmoid_layers.length;hidden_layer_number++)
+		{
+			Element LayerNumber = doc.createElement("layernumber");
+			LayerNumber.appendChild(doc.createTextNode(Double.toString(sigmoid_layers[hidden_layer_number].b[hidden_layer_number])));
+			LayerNumber.setAttribute("No",Integer.toString(hidden_layer_number));
+			bias.appendChild(LayerNumber);
+			System.out.println("bias = "+sigmoid_layers[hidden_layer_number].b[hidden_layer_number]);
+		}
+		rootElement.appendChild(bias);
+
+		//Writting XML to file
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(doc);
 		StreamResult result = new StreamResult(new File("file.xml"));
 		transformer.transform(source, result);
 		System.out.println("File saved!");
+
 	}
 
 
@@ -189,15 +205,19 @@ public class DBN {
 		// layer activation
 		for(int i=0; i<n_layers; i++) //n_layers = 4 (number of hidden layers) 
 		{
-			layer_input = new double[sigmoid_layers[i].n_out];
+			layer_input = new double[sigmoid_layers[i].n_out];//
 
-			for(int k=0; k<sigmoid_layers[i].n_out; k++) 
+			for(int k=0; k<sigmoid_layers[i].n_out; k++) //sigmoid_layers[i].n_out give number of perceptron in each layer
 			{
+				//n_out number of perceptron in  next layer e.g. = 2
+				//System.out.print("input to = "+sigmoid_layers[i].n_out);
 				linear_output = 0.0;
 
 				for(int j=0; j<sigmoid_layers[i].n_in; j++) 
 				{
-					linear_output += sigmoid_layers[i].W[k][j] * prev_layer_input[j];
+					//n_in number of perceptron in  prev layer e.g. = 6 
+					//System.out.println("   output from  =" +sigmoid_layers[i].n_in);
+					linear_output += sigmoid_layers[i].W[k][j]* prev_layer_input[j]; 
 				}
 				linear_output += sigmoid_layers[i].b[k];
 				layer_input[k] = sigmoid(linear_output);
@@ -208,8 +228,6 @@ public class DBN {
 				for(int j=0; j<sigmoid_layers[i].n_out; j++) prev_layer_input[j] = layer_input[j];
 			}
 		}
-
-
 
 		for(int i=0; i<log_layer.n_out; i++) {
 			y[i] = 0;

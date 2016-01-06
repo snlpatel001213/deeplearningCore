@@ -17,12 +17,6 @@ import org.w3c.dom.Element;
 
 public class twoDtoXML {
 
-	public static void main(String[] args) 
-	{
-
-	}
-
-
 	public static void XMLify(String fileName, int hidden_layer_number, double[][] w, Document doc, Element layernumber) throws ParserConfigurationException, TransformerException 
 	{
 		for(int rows=0; rows<w.length; rows++)
@@ -42,7 +36,7 @@ public class twoDtoXML {
 
 		}
 		System.out.println("=======================================================");
-		
+
 	}
 
 }

@@ -125,20 +125,34 @@ public class DBN {
 		String fileName="model.txt";
 		File modelOut = new File(fileName);
 		Formatter fmt = new Formatter(modelOut);
-		  
+		// Initializing file parameters
+		String biasFileName="bias.txt";
+		File biasOut = new File(biasFileName);
+		Formatter biasfmt = new Formatter(biasOut);
+
 		for(int hidden_layer_number=0;hidden_layer_number<sigmoid_layers.length;hidden_layer_number++)
 		{
 
-				try {
-					DeepLearning.modelReaderWritter.writter("model.txt",hidden_layer_number,sigmoid_layers[hidden_layer_number].W,fmt);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					System.out.println("Writting model file failed");
-				}
+			try {
+				DeepLearning.modelReaderWritter.writter(hidden_layer_number,sigmoid_layers[hidden_layer_number].W,fmt);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Writting model file failed");
+			}
 		}
 		fmt.close();
+		////////////////////////////////////////////////////////////////////////////////////////
 
-
+		for(int hidden_layer_number=0;hidden_layer_number<sigmoid_layers.length;hidden_layer_number++)
+		{
+			try {
+				DeepLearning.modelReaderWritter.biasWritter(hidden_layer_number,sigmoid_layers[hidden_layer_number].b,biasfmt);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Writting bias file failed");
+			}
+		}
+		biasfmt.close();
 
 	}
 

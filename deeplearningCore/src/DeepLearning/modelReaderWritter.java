@@ -12,8 +12,13 @@ import java.util.regex.Pattern;
 public class modelReaderWritter {
 	public static void main(String[] args) throws IOException 
 	{
-		DeepLearning.modelReaderWritter.reader("model.txt");
-		DeepLearning.modelReaderWritter.biasReader("bias.txt");
+		//DeepLearning.modelReaderWritter.reader("model.txt");
+		//DeepLearning.modelReaderWritter.biasReader("bias.txt");
+		//DeepLearning.modelReaderWritter.layerCounter("model.txt");
+		//		DeepLearning.modelReaderWritter.currentLayerPreceptron("model.txt", 0);
+		//		DeepLearning.modelReaderWritter.prevLayerPreceptron("model.txt", 0);
+		//		DeepLearning.modelReaderWritter.getWeight("model.txt", 0, 1, 4);
+		DeepLearning.modelReaderWritter.getBias("bias.txt", 1);
 	}
 	public static void writter(int hidden_layer_number, double[][] w, Formatter fmt) throws IOException
 	{
@@ -78,6 +83,44 @@ public class modelReaderWritter {
 		}
 
 	}
+	public static int layerCounter(String fileName)
+	{
+		BufferedReader br = null;
+		Set<Integer> totalLayerNumber = new HashSet<Integer>();
+		try 
+		{
+			String sCurrentLine;
+			br = new BufferedReader(new FileReader(fileName));
+			while ((sCurrentLine = br.readLine()) != null) 
+			{
+				////output is generated as layernumber, nextlayer_perceptron, currentlayer_perceptron, weight
+				//System.out.println(sCurrentLine);
+				String pattern = "(\\d+)\\t(\\d+)\\t(\\d+)\\t([+-]*\\d+.\\d+)";
+				// Create a Pattern object
+				Pattern r = Pattern.compile(pattern);
+				// Now create matcher object.
+				Matcher m = r.matcher(sCurrentLine);
+				if (m.find( )) {
+					int layernumber=Integer.parseInt(m.group(1));
+					totalLayerNumber.add(layernumber);
+
+				} else {
+					System.out.println("Patterns are not maching the model files signature");
+				}	
+
+			}
+			System.out.println("totalLayerNumber  == "+totalLayerNumber.size());
+
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("Model file not found or unreadable");
+			e.printStackTrace();
+		}
+
+		return totalLayerNumber.size();
+
+	}
 	public static void biasReader(String fileName)
 	{
 		BufferedReader br = null;
@@ -111,9 +154,140 @@ public class modelReaderWritter {
 		} 
 		catch (IOException e) 
 		{
-			System.out.println("Bias file not found or unreadable");
+			System.out.println("Patterns are not maching the bias files signature");
 			e.printStackTrace();
 		}
 
+	}
+	public static int currentLayerPreceptron(String fileName,int LayerNumber)
+	{
+		BufferedReader br = null;
+		Set<Integer> currentLayerPerceptron = new HashSet<Integer>();
+		try 
+		{
+			String sCurrentLine;
+			br = new BufferedReader(new FileReader(fileName));
+			while ((sCurrentLine = br.readLine()) != null) 
+			{
+				////output is generated as layernumber, nextlayer_perceptron, currentlayer_perceptron, weight
+				//System.out.println(sCurrentLine);
+				String pattern = "("+LayerNumber+")\\t(\\d+)\\t(\\d+)\\t([+-]*\\d+.\\d+)";
+				// Create a Pattern object
+				Pattern r = Pattern.compile(pattern);
+				// Now create matcher object.
+				Matcher m = r.matcher(sCurrentLine);
+				if (m.find( )) {
+					int layernumber=Integer.parseInt(m.group(1));
+					int currentlayer_perceptron=Integer.parseInt(m.group(2));	
+					currentLayerPerceptron.add(currentlayer_perceptron);
+
+				} 
+			}
+			System.out.println("perceptron in current layer  == "+currentLayerPerceptron.size());
+
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("failed to read current layer perceptron from the file");
+			e.printStackTrace();
+		}
+		return currentLayerPerceptron.size();
+	}
+	public static int prevLayerPreceptron(String fileName,int LayerNumber)
+	{
+		BufferedReader br = null;
+		Set<Integer> prevLayerPerceptron = new HashSet<Integer>();
+		try 
+		{
+			String sCurrentLine;
+			br = new BufferedReader(new FileReader(fileName));
+			while ((sCurrentLine = br.readLine()) != null) 
+			{
+				////output is generated as layernumber, nextlayer_perceptron, currentlayer_perceptron, weight
+				//System.out.println(sCurrentLine);
+				String pattern = "("+LayerNumber+")\\t(\\d+)\\t(\\d+)\\t([+-]*\\d+.\\d+)";
+				// Create a Pattern object
+				Pattern r = Pattern.compile(pattern);
+				// Now create matcher object.
+				Matcher m = r.matcher(sCurrentLine);
+				if (m.find( )) {
+					int layernumber=Integer.parseInt(m.group(1));
+					int prevlayer_perceptron=Integer.parseInt(m.group(3));	
+					prevLayerPerceptron.add(prevlayer_perceptron);
+
+				} 
+			}
+			System.out.println("perceptron in previous layer  == "+prevLayerPerceptron.size());
+
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("failed to read previous layer perceptron from the file");
+			e.printStackTrace();
+		}
+		return prevLayerPerceptron.size();
+	}
+	public static double getWeight(String fileName,int LayerNumber,int currentLayer, int prevLayer)
+	{
+		BufferedReader br = null;
+		double weightFromFile = 0;
+		try 
+		{
+			String sCurrentLine;
+			br = new BufferedReader(new FileReader(fileName));
+			while ((sCurrentLine = br.readLine()) != null) 
+			{
+				////output is generated as layernumber, nextlayer_perceptron, currentlayer_perceptron, weight
+				//System.out.println(sCurrentLine);
+				String pattern = "("+LayerNumber+")\\t("+currentLayer+")\\t("+prevLayer+")\\t([+-]*\\d+.\\d+)";
+				// Create a Pattern object
+				Pattern r = Pattern.compile(pattern);
+				// Now create matcher object.
+				Matcher m = r.matcher(sCurrentLine);
+				if (m.find( )) 
+				{
+					weightFromFile=Double.parseDouble(m.group(4));	
+				}
+			}
+			System.out.println("perceptron in previous layer  == "+ weightFromFile);
+
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("failed to read previous layer perceptron from the file");
+			e.printStackTrace();
+		}
+		return weightFromFile;
+	}
+	public static double getBias(String fileName,int LayerNumber)
+	{
+		BufferedReader br = null;
+		double bias = 0;
+		try 
+		{
+			String sCurrentLine;
+			br = new BufferedReader(new FileReader(fileName));
+			while ((sCurrentLine = br.readLine()) != null) 
+			{
+				////output is generated as layernumber, nextlayer_perceptron, currentlayer_perceptron, weight
+				//System.out.println(sCurrentLine);
+				String pattern = "("+LayerNumber+")\\t([+-]*\\d+.\\d+)";
+				// Create a Pattern object
+				Pattern r = Pattern.compile(pattern);
+				// Now create matcher object.
+				Matcher m = r.matcher(sCurrentLine);
+				if (m.find( )) {
+					bias=Double.parseDouble(m.group(2));
+					System.out.println(LayerNumber+" bias output\t"+bias);
+				}
+			}
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("Patterns are not maching the bias files signature");
+			e.printStackTrace();
+		}
+
+		return bias;
 	}
 }

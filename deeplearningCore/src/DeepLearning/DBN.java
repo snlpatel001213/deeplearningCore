@@ -192,8 +192,44 @@ public class DBN {
 			}
 			y[i] += log_layer.b[i];
 		}
-
 		log_layer.softmax(y);
+	}
+	public void predictFromModelFile(int[] x, double[] y)//Y is the output matrix size x is a test input
+	{
+		String fileName="model.txt";
+		double[] layer_input = new double[0];
+		// int prev_layer_input_size;
+		double[] prev_layer_input = new double[n_ins];
+		for(int j=0; j<n_ins; j++) prev_layer_input[j] = x[j];
+
+		double linear_output;
+		
+		for(int i=0; i<DeepLearning.modelReaderWritter.layerCounter(fileName); i++) {
+			{
+				layer_input = new double[DeepLearning.modelReaderWritter.prevLayerPreceptron(fileName, i)];//
+
+				for(int k=0; k<DeepLearning.modelReaderWritter.prevLayerPreceptron(fileName, i); k++) //sigmoid_layers[i].n_out give number of perceptron in each layer
+				{
+					//n_out number of perceptron in  next layer e.g. = 2
+					//System.out.print("input to = "+sigmoid_layers[i].n_out);
+					linear_output = 0.0;
+
+					for(int j=0; j<DeepLearning.modelReaderWritter.currentLayerPreceptron(fileName, i); j++) 
+					{
+						//n_in number of perceptron in  prev layer e.g. = 6 
+						//System.out.println("   output from  =" +sigmoid_layers[i].n_in);
+						linear_output += DeepLearning.modelReaderWritter.getWeight(fileName, i, k, j)*prev_layer_input[j]; 
+					}
+					linear_output += DeepLearning.modelReaderWritter.getBias(fileName, i);
+					layer_input[k] = sigmoid(linear_output);
+				}
+
+				if(i < DeepLearning.modelReaderWritter.layerCounter(fileName)-1) {
+					prev_layer_input = new double[sigmoid_layers[i].n_out];
+					for(int j=0; j<sigmoid_layers[i].n_out; j++) prev_layer_input[j] = layer_input[j];
+				}
+			}
+		}
 	}
 
 	private static void test_dbn() throws IOException {
@@ -254,7 +290,8 @@ public class DBN {
 
 		// test
 		for(int i=0; i<test_N; i++) {
-			dbn.predict(test_X[i], test_Y[i]);
+			//dbn.predict(test_X[i], test_Y[i]);
+			dbn.predictFromModelFile(test_X[i], test_Y[i]);
 			for(int j=0; j<n_outs; j++) {
 				System.out.print(test_Y[i][j] + " ");
 			}
